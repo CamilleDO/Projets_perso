@@ -1,0 +1,59 @@
+Sub facture_enregistrer()
+
+    Sheets("Liste Factures").Range("E10").EntireRow.Insert
+    Sheets("Liste Factures").Range("E10").Value = Sheets("Facture").Range("J12").Value
+    Sheets("Liste Factures").Range("F10").Value = Sheets("Facture").Range("J11").Value
+    Sheets("Liste Factures").Range("G10").Value = Sheets("Facture").Range("I16").Value
+    Sheets("Liste Factures").Range("H10").Value = Sheets("Facture").Range("J38").Value
+    Sheets("Liste Factures").Range("I10").Value = "Impayée"
+    
+    Dim nomDocument As String, dossierAdresse As String
+    dossierAdresse = Sheets("Parameters").Range("K12").Value & "\"
+    nomDocument = Sheets("Facture").Range("J12").Value
+    
+    Sheets("Liste Factures").Range("Q10").Value = dossierAdresse & nomDocument & ".pdf"
+    With Sheets("Liste Factures").Hyperlinks.Add(Sheets("Liste Factures").Range("K10"), Address:=dossierAdresse & nomDocument & ".pdf", TextToDisplay:="Consulter")
+        .Range.Font.Name = "Montserrat"
+        .Range.Font.Color = RGB(60, 65, 205)
+        .Range.Font.Size = 11
+    End With
+    
+    Dim wb As Workbook, feuille As Worksheet
+    Dim plage As String
+    Dim iVis As XlSheetVisibility
+
+    Set wb = ThisWorkbook
+    Set feuille = wb.Sheets("Facture")
+    
+
+    'Mettre à plage l adresse de la plage à imprimer
+    plage = "$C$8:$M$55"
+
+    Application.ScreenUpdating = False
+
+    With feuille.PageSetup
+            .PrintArea = plage
+            .FitToPagesTall = 1
+            .FitToPagesWide = 1
+            .LeftMargin = Application.InchesToPoints(0)
+            .RightMargin = Application.InchesToPoints(0)
+            .TopMargin = Application.InchesToPoints(0)
+            .BottomMargin = Application.InchesToPoints(0)
+    End With
+
+    With feuille
+            iVis = .Visible
+            .Visible = xlSheetVisible
+            .Activate
+            .ExportAsFixedFormat Type:=xlTypePDF, _
+                Filename:=dossierAdresse & nomDocument & ".pdf", _
+                Quality:=xlQualityStandard, IncludeDocProperties:=True, _
+                IgnorePrintAreas:=False, OpenAfterPublish:=True
+            .Visible = iVis
+    End With
+    Application.ScreenUpdating = True
+
+
+    
+
+End Sub

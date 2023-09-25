@@ -1,0 +1,20 @@
+Sub nouveau_devis()
+
+    annee = Year(Date)
+    mois = Format(Month(Date), "00")
+    ID = Right(Sheets("Devis").Range("J10"), 4)
+    anneeFacture = Mid(Sheets("Devis").Range("J10"), 2, 4)
+    
+    
+    If Int(annee) = Int(anneeFacture) Then
+        Range("J10") = "F" & annee & "-" & mois & "-" & Format(Int(ID) + 1, "0000")
+    Else
+        Range("J10") = "F" & annee & "-" & mois & "-" & "0001"
+    End If
+    
+    
+    Sheets("Devis").Range("F20:F32").Value = ""
+    Sheets("Devis").Range("I20:I32").Value = ""
+    Sheets("Devis").Range("I14").Value = ""
+
+End Sub

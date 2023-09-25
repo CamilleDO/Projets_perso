@@ -1,0 +1,6 @@
+Sub annuler_devis()
+    Sheets("Devis").Range("F20:F32").Value = ""
+    Sheets("Devis").Range("I20:I32").Value = ""
+    Sheets("Devis").Range("I14").Value = ""
+
+End Sub
